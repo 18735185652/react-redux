@@ -23,11 +23,12 @@ function createStore(reducer, preloadedState) {
     function dispatch(action) {
         // 接收reducer，计算新的state，通知新的订阅函数执行
         state = reducer(state, action)
-        console.log('state: ', state);
         // 挨个通知订阅的函数执行
         listeners.forEach(l => l())
         return action
     }
+    // 在创建仓库的时候 会先派发一次action，先让默认值生效
+    dispatch({type:'@@REDUX/INIT'})
     const store = {
         getState,
         subscribe,

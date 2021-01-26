@@ -1,48 +1,33 @@
 import React from 'react';
-import { createStore ,bindActionCreators} from '../../redux';
+import store from '../../store';
+import {bindActionCreators} from '../../redux'
+import {ADD1,MINUS1} from '../../store/action-types'
 
-const ADD = 'ADD';
-const MINUS = 'MINUS';
-
-
-// reducer是一个纯函数 
-function reducer(oldState = { number: 0 }, action) {
-    switch (action.type) { // 判断动作的类型
-        case ADD:
-            return { number: oldState.number + action.payload };
-        case MINUS:
-            return { number: oldState.number - action.payload };
-        default:
-            return oldState;
-    }
-}
-
-
-let store = createStore(reducer, { number: 0 })
 function add(payload){
-    return {type:ADD,payload}
+    return {type:ADD1,payload}
 }
 function minus(payload){
-    return {type:MINUS,payload}
+    return {type:MINUS1,payload}
 }
+
 // 创建一个actionCreator对象
 const actions ={add,minus}
-// 绑定actionCreator
+
+// 绑定actionCreator,可以让你简写diapatch
 const boundActions = bindActionCreators(actions,store.dispatch)
 class Counter1 extends React.Component {
-    state = { number: store.getState().number }
+    state = { number: store.getState().counter1.number }
 
     // 加载完成后 订阅this.state，react自带状态更新会触发render渲染
     componentDidMount() {
         this.unsubscribe = store.subscribe(() => {
-            this.setState({ number: store.getState().number })
+            this.setState({ number: store.getState().counter1.number })
         })
     }
     componentWillUnmount() {
         this.unsubscribe()
     }
     render() {
-        console.log('  store', store.getState());
         return (
             <div>
                 <p>{this.state.number}</p>
