@@ -32,7 +32,7 @@ function connect(mapStateToProps, mapDispatchToProps) {
                     dispatchProps = {dispatch:store.dispatch}
                 }
                 return dispatchProps      
-            },[store])
+            },[store.dispatch])
             return <OldComponent {...props} {...stateProps} {...dispatchProps} />
         }
     }
