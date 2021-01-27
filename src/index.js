@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider} from './react-redux'
 import Counter1 from './components/Counter1'
 import Counter2 from './components/Counter2'
+import store from './store'
 
-
+//Provider 的原理就是context
 ReactDOM.render(
-  <div>
+  <Provider store={store}>
     <Counter1 />
     <Counter2 />
-  </div>,
+  </Provider>,
   document.getElementById('root')
 );
 

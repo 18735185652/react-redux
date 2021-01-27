@@ -1,39 +1,27 @@
 import React from 'react';
-import store from '../../store';
-import {bindActionCreators} from '../../redux'
 import actions from '../../store/actions/counter1';
+import {connect} from '../../react-redux'
 
-
-// 绑定actionCreator,可以让你简写diapatch
-const boundActions = bindActionCreators(actions,store.dispatch)
 class Counter1 extends React.Component {
-    state = { number: store.getState().counter1.number }
-
-    // 加载完成后 订阅this.state，react自带状态更新会触发render渲染
-    componentDidMount() {
-        this.unsubscribe = store.subscribe(() => {
-            this.setState({ number: store.getState().counter1.number })
-        })
-    }
-    componentWillUnmount() {
-        this.unsubscribe()
-    }
+    
     render() {
+        const {number} = this.props;
         return (
             <div>
-                <p>{this.state.number}</p>
+                <p>{number}</p>
 
-                {/* <button onClick={() => { store.dispatch({ type: ADD, payload: 1 }) }}> + </button>
-                <button onClick={() => { store.dispatch({ type: MINUS, payload: 1 }) }}> - </button> */}
-               
-                {/* <button onClick={() => {store.dispatch(add(1))}}> + </button>
-                <button onClick={() => { store.dispatch(minus(1))}}> - </button> */}
-
-                <button onClick={() => {boundActions.add1(1)}}> + </button>
-                <button onClick={() => {boundActions.minus1(1)}}> - </button>
+                <button onClick={() => {this.props.add1(1)}}> + </button>
+                <button onClick={() => {this.props.minus1(1)}}> - </button>
             </div>
         )
     }
 }
+//这是一个映射函数 可以把仓库的状态进行映射出来分状态，分状态会成为组件的属性对象
+let mapStateToProps = state => state.counter1;
+// actions也会进行绑定 成为当前组件的属性对象
+export default connect(mapStateToProps,actions)(Counter1);
 
-export default Counter1
+/**
+ * connect 负责把仓库和组件进行关联
+ * 通过context获取store 
+ */
