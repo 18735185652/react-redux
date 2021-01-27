@@ -5,7 +5,10 @@ import Counter2 from './components/Counter2'
 
 
 ReactDOM.render(
-  <Counter1 />,
+  <div>
+    <Counter1 />
+    <Counter2 />
+  </div>,
   document.getElementById('root')
 );
 
