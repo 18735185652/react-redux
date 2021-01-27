@@ -20,9 +20,19 @@ function connect(mapStateToProps, mapDispatchToProps) {
                 return store.subscribe(forceUpdate)
             }, [store])
             // let mapStateToProps = state => state.counter1;
-            const stateProps = mapStateToProps(state) //把返回的对象当成了OldComponent组件的属性
-            let dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
-
+            const stateProps = React.useMemo(()=> mapStateToProps(state),[state]) //把返回的对象当成了OldComponent组件的属性
+             
+            let dispatchProps = React.useMemo(()=>{
+                let dispatchProps;
+                if(typeof mapDispatchToProps === 'object'){
+                    dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+                }else if(typeof mapDispatchToProps === 'function'){
+                    dispatchProps = mapDispatchToProps(store.dispatch)
+                }else {
+                    dispatchProps = {dispatch:store.dispatch}
+                }
+                return dispatchProps      
+            },[store])
             return <OldComponent {...props} {...stateProps} {...dispatchProps} />
         }
     }
@@ -44,7 +54,15 @@ function connect2(mapStateToProps, mapDispatchToProps) {
             render() {
                 const { store } = this.context;
                 const state = store.getState();
-                const dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+               
+                let dispatchProps;
+                if(typeof mapDispatchToProps === 'object'){
+                    dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+                }else if(typeof mapDispatchToProps === 'function'){
+                    dispatchProps = mapDispatchToProps(store.dispatch)
+                }else {
+                    dispatchProps = {dispatch:store.dispatch}
+                }
 
                 const newState = mapStateToProps(state, dispatchProps)
                 return <OldComponent {...this.props} {...newState} {...dispatchProps} />
