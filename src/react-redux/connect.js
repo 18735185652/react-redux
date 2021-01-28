@@ -50,7 +50,6 @@ function connect2(mapStateToProps, mapDispatchToProps) {
             componentWillUnmount() {
                 this.unsubscribe();
             }
-
             render() {
                 const { store } = this.context;
                 const state = store.getState();

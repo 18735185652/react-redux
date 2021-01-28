@@ -14,7 +14,6 @@ function combineReducers(reducers) {
             const previousState = state[key];
             nextState[key] = reducer(previousState, action)
         }
-        console.log('nextState: ', nextState);
         return nextState
        
     }
